@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name>dubbo_basis</display-name>
+	
+	<welcome-file-list>
+    	<welcome-file>welcome.jsp</welcome-file>
+  	</welcome-file-list>
+	
+	<!--全局范围内环境参数初始化 -->
+	<context-param>
+    	<param-name>contextConfigLocation</param-name>
+    	<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	
+	<!-- 让表单支持CURD,过滤器 -->
+	<filter>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!--编码过滤器filter  -->
+	 <filter>      <!-- 用来声明filter的相关设定,过滤器可以截取和修改一个Servlet或JSP页面的请求或从一个Servlet或JSP页面发出的响应-->  
+        <filter-name>encodingFilter</filter-name>     <!--指定filter的名字-->  
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class> <!--定义filter的类的名称-->  
+        <async-supported>true</async-supported>     <!--设置是否启用异步支持-->  
+        <init-param><!--用来定义参数,若在Servlet可以使用下列方法来获得:String param_name=getServletContext().getInitParamter("param-name里面的值");-->  
+            <param-name>encoding</param-name>   <!--参数名称-->  
+            <param-value>UTF-8</param-value> <!--参数值-->  
+        </init-param>  
+    </filter>  
+    <filter-mapping><!--用来定义filter所对应的URL-->  
+        <filter-name>encodingFilter</filter-name>     <!--指定对应filter的名字-->  
+        <url-pattern>/*</url-pattern>       <!--指定filter所对应的URL-->  
+    </filter-mapping>  
+	
+	<!-- 监听器配置 ？？-->  
+    <!--例:spring监听器-->  
+    <listener>        <!--用来设定Listener接口-->  
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class><!--定义Listener的类名称-->  
+    </listener>  
+    <!-- 防止Spring内存溢出监听器  -->  
+    <listener>  
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>  
+    </listener>  
+	
+	
+	<!-- 配置Dispatcher(调度者)servlet -->
+	<servlet>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:springmvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!--配置servlet处理的URL请求  -->
+	<servlet-mapping>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+
+
+
+
+
+
+
+
+
+
+
+</web-app>

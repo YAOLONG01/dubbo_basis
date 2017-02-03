@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--命名空间  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+	http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.2.xsd	
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.2.xsd 
+    ">
+  	
+    <!--由于基于注解，@Controller  先要扫描的包-->
+    <context:component-scan base-package="cn.hjycjc.dubbo.basis.controller">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>  
+    </context:component-scan>
+    <!-- 视图解析器，将字符解析为实际的资源 ；-->
+    <!-- 配置InternalResourceViewResoler(内部资源视图解决[答]问题者) ；这是最初的视图解析器-->
+    <!--默认的使用 InternalResourceView -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 默认的优先级是最大值 -->
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!--自定义视图使用的视图解析器  -->
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<!--由于使用了两个视图解析器，将其优先级设置为100  -->
+		<property name="order" value="100"></property>
+	</bean>
+	
+	<!--直接配置view-controller，而不对应一个方法;容易出现DispatcherServlet错误;解决方法配置mvc:annotation-driven-->
+	<mvc:view-controller path="success" view-name="success"/>
+	<!--在开发中都会配置  -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	
+	<!-- 处理静态资源 -->
+	<mvc:default-servlet-handler/>
+</beans>

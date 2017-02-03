@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-4.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.2.xsd 
+    ">
+    
+    <!--配置数据源  -->
+    <!-- properties的方式 -->
+    <context:property-placeholder location="classpath:jdbc_c3p0.properties"/>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    	<!--主要的部分  -->
+    	<property name="user" value="${jdbc.user}"></property>
+    	<property name="password" value="${jdbc.password}"></property>
+    	<property name="driverClass" value="${jdbc.driverClass}"></property>
+    	<property name="jdbcUrl" value="${jdbc.Url}"></property>
+    	<!--c3p0中对资源池的配置 -->
+    	<property name="description" value="DataSource for wocloud.cn Core Service" />
+    	<property name="minPoolSize" value="${c3p0.minPoolSize}" />
+    	<property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
+    	<property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
+    	<property name="maxIdleTime" value="${c3p0.maxIdleTime}" />
+    	<property name="idleConnectionTestPeriod" value="${c3p0.idleConnectionTestPeriod}" />
+    	<property name="automaticTestTable" value="${c3p0.automaticTestTable}" />
+    	<property name="maxStatements" value="${c3p0.maxStatements}" />
+    	<property name="testConnectionOnCheckin" value="${c3p0.testConnectionOnCheckin}" />
+    </bean>
+    
+    <!--扫描的包  ,去除Controller-->
+     <context:component-scan base-package="cn.hjycjc.dubbo.basis">
+  		 <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/> 
+  	</context:component-scan>
+  	
+  	<!--配置Mybatis 的sqlSessionFactory Bean  -->
+  	<!--为了关联Spring设置的Bean  -->
+  	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  		<!-- 取代mybaits中数据源的各种配置 -->
+  		<property name="dataSource" ref="dataSource"></property>
+  		<property name="configLocation" value="classpath:mybatis_config_spring.xml"></property> 
+  		    <!-- 自动扫描mapping.xml文件 -->  
+    	<property name="mapperLocations" value="classpath:cn/hjycjc/dubbo/basis/dao/*.xml"></property> 
+  	</bean>
+  	
+  	<!-- 装配dao接口 -->  
+  	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+    	<property name="basePackage" value="cn.hjycjc.dubbo.basis.dao" /> <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  
+    	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
+  	</bean> 
+  	
+</beans>

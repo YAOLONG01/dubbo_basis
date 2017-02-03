@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+ <mapper namespace="cn.hjycjc.dubbo.basis.dao.EmployeeDao">
+	<select id="getForId" parameterType="java.lang.String" resultType="cn.hjycjc.dubbo.basis.bean.Employee">
+	SELECT employee_id AS employeeId, employee_name AS employeeName ,employee_age AS employeeAge,employee_email AS employeeEamil,employee_tel AS employeeTel FROM employee WHERE employee_id =#{employeeId} 
+	</select>
+ </mapper>
+ 
